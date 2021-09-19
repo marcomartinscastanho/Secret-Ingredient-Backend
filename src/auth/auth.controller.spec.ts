@@ -3,6 +3,7 @@ import { LoggedInUser } from "../types/logged-in.user";
 import { AuthController } from "./auth.controller";
 import { RegisterInputDto } from "./dto/register.input.dto";
 import { Role } from "../types/role.enum";
+import { AuthService } from "./auth.service";
 
 describe("AuthController", () => {
   let controller: AuthController;
@@ -22,7 +23,7 @@ describe("AuthController", () => {
       providers: [
         AuthController,
         {
-          provide: "AuthService",
+          provide: AuthService,
           useValue: MockAuthService,
         },
       ],

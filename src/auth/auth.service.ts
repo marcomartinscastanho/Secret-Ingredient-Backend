@@ -15,19 +15,13 @@ export class AuthService {
 
   async validateUser(dto: LoginInputDto): Promise<LoggedInUser> {
     const user = await this.usersService.findByNameOrFail(dto.username);
-    console.log("saved user", user);
-    console.log("input credentials", dto);
 
     return bcrypt.compare(dto.password, user.password).then((result) => {
       if (result) {
-        console.log("Passwords matched");
-
         const { _id, username, role } = user;
         return { _id: `${_id}`, username, role };
-      } else {
-        console.log("Passwords did NOT match");
-        return Promise.reject();
       }
+      return Promise.reject();
     });
   }
 

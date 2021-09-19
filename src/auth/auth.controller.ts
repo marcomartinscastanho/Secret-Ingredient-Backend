@@ -35,8 +35,6 @@ export class AuthController {
     description: "Wrong username or password",
   })
   async login(@Req() { user }: { user: LoggedInUser }): Promise<LoginOutputDto> {
-    console.log(user);
-
     return this.authService.onLogin(user);
   }
 

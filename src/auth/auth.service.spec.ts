@@ -2,12 +2,14 @@
 import { BadRequestException, HttpException, HttpStatus } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { ObjectId } from "mongodb";
-import bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 import { UserInputDto } from "../users/dto/user.input.dto";
 import { User } from "../users/user.model";
 import { AuthService } from "./auth.service";
 import { Role } from "../types/role.enum";
 import { LoggedInUser } from "../types/logged-in.user";
+import { UsersService } from "../users/users.service";
+import { JwtService } from "@nestjs/jwt";
 
 async function cypher(password: string): Promise<string> {
   return bcrypt.hash(password, 10);
@@ -67,11 +69,11 @@ describe("AuthService", () => {
       providers: [
         AuthService,
         {
-          provide: "UsersService",
+          provide: UsersService,
           useValue: MockUsersService,
         },
         {
-          provide: "JwtService",
+          provide: JwtService,
           useValue: MockJwtService,
         },
       ],

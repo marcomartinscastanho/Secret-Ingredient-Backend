@@ -4,6 +4,7 @@ import { User } from "../../users/user.model";
 import { LoginInputDto } from "../dto/login.input.dto";
 import { Role } from "../../types/role.enum";
 import { LocalStrategy } from "./local.strategy";
+import { AuthService } from "../auth.service";
 
 describe("Local Strategy", () => {
   let localStrategy: LocalStrategy;
@@ -28,7 +29,7 @@ describe("Local Strategy", () => {
       providers: [
         LocalStrategy,
         {
-          provide: "AuthService",
+          provide: AuthService,
           useValue: MockAuthService,
         },
       ],
