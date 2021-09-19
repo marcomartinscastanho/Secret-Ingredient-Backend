@@ -28,6 +28,15 @@ export class IngredientsService {
     return query.sort("-createdAt").exec(); // FIXME: change to name
   }
 
+  async findOneOrFail(id: string): Promise<Ingredient> {
+    return this.ingredientModel
+      .findById(id)
+      .orFail()
+      .catch(() => {
+        throw new NotFoundException(`Ingredient with id ${id} not found.`);
+      });
+  }
+
   async remove(id: string): Promise<void> {
     await this.ingredientModel
       .findByIdAndDelete(id)

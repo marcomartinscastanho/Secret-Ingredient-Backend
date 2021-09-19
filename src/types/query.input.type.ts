@@ -1,5 +1,6 @@
 export type QueryInput = {
   page?: number;
   results?: number;
-  filter?: string;
 };
+
+export type RecipeIngredientsQueryInput = QueryInput & { recipeId?: string };
