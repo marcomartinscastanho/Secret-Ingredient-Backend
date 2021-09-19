@@ -14,6 +14,7 @@ async function bootstrap() {
     .setVersion(Swagger.appVersion)
     .addTag(Swagger.apiTags.auth)
     .addTag(Swagger.apiTags.users)
+    .addTag(Swagger.apiTags.ingredients)
     .addBearerAuth({ type: "http", scheme: "bearer", bearerFormat: "JWT" }, "accessToken")
     .build();
 

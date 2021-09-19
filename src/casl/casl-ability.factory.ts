@@ -8,12 +8,12 @@ import {
 } from "@casl/ability";
 import { Injectable } from "@nestjs/common";
 import { Role } from "../types/role.enum";
-// import { Run } from "../runs/run.model";
+import { Ingredient } from "../ingredients/ingredients.model";
 import { User } from "../users/user.model";
 import { Action } from "./action.enum";
 import { LoggedInUser } from "../types/logged-in.user";
 
-type Subjects = InferSubjects<typeof User /*| typeof Run*/> | "all";
+type Subjects = InferSubjects<typeof User | typeof Ingredient> | "all";
 
 export type AppAbility = Ability<[Action, Subjects]>;
 
@@ -27,10 +27,8 @@ export class CaslAbilityFactory {
     switch (user.role) {
       case Role.User:
       default:
-        // can(Action.Create, Run);
-        // can(Action.Read, Run, { $where: { user: user._id } });
-        // can(Action.Update, Run, { $where: { user: user._id } });
-        // can(Action.Delete, Run, { $where: { user: user._id } });
+        can(Action.Create, Ingredient);
+        can(Action.Read, Ingredient);
         break;
       case Role.Admin:
         can(Action.Manage, "all");

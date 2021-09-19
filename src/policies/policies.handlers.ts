@@ -4,7 +4,7 @@
 import { User } from "../users/user.model";
 import { Action } from "../casl/action.enum";
 import { AppAbility } from "../casl/casl-ability.factory";
-// import { Run } from "../runs/run.model";
+import { Ingredient } from "src/ingredients/ingredients.model";
 
 interface IPolicyHandler {
   handle(ability: AppAbility): boolean;
@@ -44,32 +44,26 @@ export class ManageUserPolicyHandler implements IPolicyHandler {
   }
 }
 
-// export class CreateRunPolicyHandler implements IPolicyHandler {
-//   handle(ability: AppAbility) {
-//     return ability.can(Action.Create, Run);
-//   }
-// }
+export class CreateIngredientPolicyHandler implements IPolicyHandler {
+  handle(ability: AppAbility) {
+    return ability.can(Action.Create, Ingredient);
+  }
+}
 
-// export class ReadRunPolicyHandler implements IPolicyHandler {
-//   handle(ability: AppAbility) {
-//     return ability.can(Action.Read, Run);
-//   }
-// }
+export class ReadIngredientPolicyHandler implements IPolicyHandler {
+  handle(ability: AppAbility) {
+    return ability.can(Action.Read, Ingredient);
+  }
+}
 
-// export class UpdateRunPolicyHandler implements IPolicyHandler {
-//   handle(ability: AppAbility) {
-//     return ability.can(Action.Update, Run);
-//   }
-// }
+export class DeleteIngredientPolicyHandler implements IPolicyHandler {
+  handle(ability: AppAbility) {
+    return ability.can(Action.Delete, Ingredient);
+  }
+}
 
-// export class DeleteRunPolicyHandler implements IPolicyHandler {
-//   handle(ability: AppAbility) {
-//     return ability.can(Action.Delete, Run);
-//   }
-// }
-
-// export class ManageRunPolicyHandler implements IPolicyHandler {
-//   handle(ability: AppAbility) {
-//     return ability.can(Action.Manage, Run);
-//   }
-// }
+export class ManageIngredientPolicyHandler implements IPolicyHandler {
+  handle(ability: AppAbility) {
+    return ability.can(Action.Manage, Ingredient);
+  }
+}

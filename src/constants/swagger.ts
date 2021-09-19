@@ -5,6 +5,7 @@ export const Swagger = {
   apiTags: {
     auth: "auth",
     users: "users",
+    ingredients: "ingredients",
   },
   authTag: "accessToken",
   mountPoint: "docs",
