@@ -17,51 +17,49 @@ import { JwtAuthGuard } from "../auth/jwt/jwt.guard";
 import { PoliciesGuard } from "../policies/policies.guard";
 import { CheckPolicies } from "../policies/policies.decorator";
 import {
-  CreateIngredientPolicyHandler,
-  DeleteIngredientPolicyHandler,
-  ReadIngredientPolicyHandler,
+  CreateTagPolicyHandler,
+  DeleteTagPolicyHandler,
+  ReadTagPolicyHandler,
 } from "../policies/policies.handlers";
-import { IngredientInputDto } from "./dto/ingredient.input.dto";
-import { IngredientOutputDto } from "./dto/ingredient.output.dto";
 import { QueryInput } from "../types/query.input.type";
 import { Paginated } from "../types/paginated.type";
 import { daoToDto } from "./dto/dao.to.dto";
-import { IngredientsService } from "./ingredients.service";
+import { TagsService } from "./tags.service";
+import { TagInputDto } from "./dto/tag.input.dto";
+import { TagOutputDto } from "./dto/tag.output.dto";
 
 @UseGuards(JwtAuthGuard)
-@Controller("ingredients")
-@ApiTags(Swagger.apiTags.ingredients)
+@Controller("tags")
+@ApiTags(Swagger.apiTags.tags)
 @ApiBearerAuth("accessToken")
-export class IngredientsController {
-  constructor(private readonly ingredientsService: IngredientsService) {}
+export class TagsController {
+  constructor(private readonly tagsService: TagsService) {}
 
   @Post()
   @UseGuards(PoliciesGuard)
-  @CheckPolicies(new CreateIngredientPolicyHandler())
+  @CheckPolicies(new CreateTagPolicyHandler())
   @ApiOperation({
-    summary: "Creates a new ingredient",
+    summary: "Creates a new tag",
   })
   @ApiCreatedResponse({
-    type: IngredientOutputDto,
-    description: "Ingredient is created and its properties are returned",
+    type: TagOutputDto,
+    description: "Tag is created and its properties are returned",
   })
   @ApiUnauthorizedResponse({ description: "Only logged in users can perform this request" })
   @ApiForbiddenResponse({ description: "Only allowed users can perform this request" })
   @ApiBadRequestResponse({
     description:
-      "One of:\n" +
-      " - input doesn't match the request criteria\n" +
-      " - ingredient name already in use",
+      "One of:\n" + " - input doesn't match the request criteria\n" + " - tag name already in use",
   })
-  async create(@Body() ingredientInputDto: IngredientInputDto): Promise<IngredientOutputDto> {
-    return daoToDto(await this.ingredientsService.create(ingredientInputDto));
+  async create(@Body() tagInputDto: TagInputDto): Promise<TagOutputDto> {
+    return daoToDto(await this.tagsService.create(tagInputDto));
   }
 
   @Get()
   @UseGuards(PoliciesGuard)
-  @CheckPolicies(new ReadIngredientPolicyHandler())
+  @CheckPolicies(new ReadTagPolicyHandler())
   @ApiOperation({
-    summary: "Get the list of existing ingredients",
+    summary: "Get the list of existing tags",
   })
   @ApiQuery({
     name: "page",
@@ -76,44 +74,44 @@ export class IngredientsController {
     required: false,
   })
   @ApiOkResponse({
-    type: [IngredientOutputDto],
-    description: "List of existing ingredients",
+    type: [TagOutputDto],
+    description: "List of existing tags",
   })
   @ApiUnauthorizedResponse({ description: "Only logged in users can perform this request" })
   @ApiForbiddenResponse({ description: "Only allowed users can perform this request" })
-  async findAll(@Query() query: QueryInput): Promise<Paginated<IngredientOutputDto>> {
-    const ingredients = await this.ingredientsService.findIngredients(query);
+  async findAll(@Query() query: QueryInput): Promise<Paginated<TagOutputDto>> {
+    const tags = await this.tagsService.findTags(query);
 
     return {
-      data: ingredients.map((ingredient) => daoToDto(ingredient)),
+      data: tags.map((tag) => daoToDto(tag)),
       page: query.page ? Number(query.page) : 1,
-      results: ingredients.length,
+      results: tags.length,
     };
   }
 
   @Delete(":id")
   @UseGuards(PoliciesGuard)
-  @CheckPolicies(new DeleteIngredientPolicyHandler())
+  @CheckPolicies(new DeleteTagPolicyHandler())
   @ApiOperation({
-    summary: "Deletes a given ingredient",
+    summary: "Deletes a given tag",
   })
   @ApiParam({
     name: "id",
-    description: "id of the ingredient",
+    description: "id of the tag",
     type: String,
   })
   @ApiOkResponse({
-    description: "Ingredient is deleted",
+    description: "Tag is deleted",
     type: null,
   })
   @ApiUnauthorizedResponse({ description: "Only logged in users can perform this request" })
   @ApiForbiddenResponse({ description: "Only Admin users can perform this request" })
   @ApiNotFoundResponse({
-    description: "Ingredient not found",
+    description: "Tag not found",
   })
   async remove(@Param("id") id: string): Promise<void> {
-    await this.ingredientsService.remove(id);
+    await this.tagsService.remove(id);
   }
 }
 
-export default IngredientsController;
+export default TagsController;

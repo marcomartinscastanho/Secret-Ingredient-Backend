@@ -12,8 +12,9 @@ import { Ingredient } from "../ingredients/ingredients.model";
 import { User } from "../users/user.model";
 import { Action } from "./action.enum";
 import { LoggedInUser } from "../types/logged-in.user";
+import { Tag } from "src/tags/tags.model";
 
-type Subjects = InferSubjects<typeof User | typeof Ingredient> | "all";
+type Subjects = InferSubjects<typeof User | typeof Ingredient | typeof Tag> | "all";
 
 export type AppAbility = Ability<[Action, Subjects]>;
 
@@ -29,6 +30,8 @@ export class CaslAbilityFactory {
       default:
         can(Action.Create, Ingredient);
         can(Action.Read, Ingredient);
+        can(Action.Create, Tag);
+        can(Action.Read, Tag);
         break;
       case Role.Admin:
         can(Action.Manage, "all");
