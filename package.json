@@ -83,6 +83,29 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
+    "coveragePathIgnorePatterns": [
+      "node_modules",
+      "dist",
+      "src/constants",
+      "src/casl",
+      "src/policies",
+      "src/utils/parse-filter",
+      ".module.ts",
+      "main.ts",
+      ".mock.ts",
+      ".*\\.dto\\.ts$",
+      ".*\\.entity\\.ts$",
+      ".*\\.guard\\.ts$",
+      ".*\\.type\\.ts$"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 90,
+        "lines": 90,
+        "functions": 90,
+        "branches": 90
+      }
+    },
     "testEnvironment": "node"
   }
 }
