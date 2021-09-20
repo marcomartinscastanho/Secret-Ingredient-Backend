@@ -6,6 +6,7 @@ export const Swagger = {
     auth: "auth",
     users: "users",
     ingredients: "ingredients",
+    recipes: "recipes",
     tags: "tags",
   },
   authTag: "accessToken",

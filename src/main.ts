@@ -15,6 +15,7 @@ async function bootstrap() {
     .addTag(Swagger.apiTags.auth)
     .addTag(Swagger.apiTags.users)
     .addTag(Swagger.apiTags.ingredients)
+    .addTag(Swagger.apiTags.recipes)
     .addTag(Swagger.apiTags.tags)
     .addBearerAuth({ type: "http", scheme: "bearer", bearerFormat: "JWT" }, "accessToken")
     .build();

@@ -82,9 +82,5 @@ $ npm run test:cov
 Test cases: 39
 Coverage: 97%
 
-# E2E tests
-Test cases: 136
-Coverage: 100%
-
 Also manually tested using the Swagger API.
 ```

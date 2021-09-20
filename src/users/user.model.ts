@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
+import { Recipe } from "../recipes/recipe.model";
 import { Role } from "../types/role.enum";
 
 export type UserDocument = User & Document;
@@ -17,6 +18,9 @@ export class User extends Document {
 
   @Prop({ default: Role.User })
   role!: Role;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: "Recipe" }] })
+  recipes!: Recipe[];
 
   @Prop({ default: Date.now })
   createdAt!: Date;

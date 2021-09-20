@@ -1,10 +1,9 @@
-import { RecipeIngredient } from "../recipe-ingredients.model";
 import { RecipeIngredientOutputDto } from "./recipe-ingredient.output.dto";
 import { daoToDto as ingredientDaoToDto } from "../../ingredients/dto/dao.to.dto";
+import { RecipeIngredient } from "../../types/recipe-ingredient.type";
 
 export const daoToDto = (recipeIngredient: RecipeIngredient): RecipeIngredientOutputDto => {
   return {
-    id: recipeIngredient._id,
     quantity: recipeIngredient.quantity,
     ingredient: ingredientDaoToDto(recipeIngredient.ingredient),
     specification: recipeIngredient.specification ? recipeIngredient.specification : "",

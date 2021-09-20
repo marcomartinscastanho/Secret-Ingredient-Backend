@@ -25,13 +25,30 @@ export class TagsService {
     let query: Query<TagDocument[], TagDocument> = this.tagModel.find();
     query = paginateQuery<TagDocument>(query, page, results);
 
-    return query.sort("-createdAt").exec(); // FIXME: change to name
+    return query.sort("name").exec();
+  }
+
+  // TODO: this should return also the ids and names of recipes associated with this tag
+  async findOneOrFail(id: string): Promise<Tag> {
+    return this.tagModel
+      .findById(id)
+      .orFail()
+      .catch(() => {
+        throw new NotFoundException(`Tag with id ${id} not found.`);
+      });
   }
 
   async remove(id: string): Promise<void> {
     await this.tagModel
       .findByIdAndDelete(id)
       .orFail()
+      .then(async (tag) => {
+        await Promise.all(
+          tag.recipes.map(async (recipe) => {
+            await recipe.updateOne({ $pull: { tags: tag._id } });
+          })
+        );
+      })
       .catch((e) => {
         throw new NotFoundException(e.message);
       });

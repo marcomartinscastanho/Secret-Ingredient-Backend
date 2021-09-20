@@ -32,17 +32,6 @@ export class RecipeIngredientInputDto {
   @IsOptional()
   @IsString()
   specification?: string;
-
-  @ApiProperty({
-    description: "The id of the Recipe to which this RecipeIngredient belongs",
-    example: "60702cd016b0da1906ed1906",
-    required: true,
-    type: String,
-  })
-  @IsDefined()
-  @IsNotEmpty()
-  @IsString()
-  recipeId: string;
 }
 
 export default RecipeIngredientInputDto;

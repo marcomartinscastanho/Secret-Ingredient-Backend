@@ -7,7 +7,7 @@ import { UserInputDto } from "../users/dto/user.input.dto";
 import { User } from "../users/user.model";
 import { AuthService } from "./auth.service";
 import { Role } from "../types/role.enum";
-import { LoggedInUser } from "../types/logged-in.user";
+import { LoggedInUser } from "../types/logged-in-user.type";
 import { UsersService } from "../users/users.service";
 import { JwtService } from "@nestjs/jwt";
 

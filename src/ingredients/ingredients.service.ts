@@ -25,9 +25,10 @@ export class IngredientsService {
     let query: Query<IngredientDocument[], IngredientDocument> = this.ingredientModel.find();
     query = paginateQuery<IngredientDocument>(query, page, results);
 
-    return query.sort("-createdAt").exec(); // FIXME: change to name
+    return query.sort("name").exec();
   }
 
+  // TODO: this should return also the ids and names of recipes associated with this tag
   async findOneOrFail(id: string): Promise<Ingredient> {
     return this.ingredientModel
       .findById(id)
@@ -37,6 +38,7 @@ export class IngredientsService {
       });
   }
 
+  // TODO: shouldn't be possible to delete an ingredient that has recipes associated to it
   async remove(id: string): Promise<void> {
     await this.ingredientModel
       .findByIdAndDelete(id)

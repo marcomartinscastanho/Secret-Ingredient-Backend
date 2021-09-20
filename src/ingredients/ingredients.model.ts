@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
+import { Recipe } from "../recipes/recipe.model";
 
 export type IngredientDocument = Ingredient & Document;
 
@@ -7,6 +8,9 @@ export type IngredientDocument = Ingredient & Document;
 export class Ingredient extends Document {
   @Prop({ unique: true, required: true })
   name!: string;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: "Recipe" }] })
+  recipes!: Recipe[];
 
   @Prop({ default: Date.now })
   createdAt!: Date;

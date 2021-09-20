@@ -2,7 +2,7 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
-import { LoggedInUser } from "src/types/logged-in.user";
+import { LoggedInUser } from "src/types/logged-in-user.type";
 import { UsersService } from "../users/users.service";
 import { LoginInputDto } from "./dto/login.input.dto";
 import { LoginOutputDto } from "./dto/login.output.dto";

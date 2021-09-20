@@ -6,6 +6,7 @@ import { Action } from "../casl/action.enum";
 import { AppAbility } from "../casl/casl-ability.factory";
 import { Ingredient } from "src/ingredients/ingredients.model";
 import { Tag } from "../tags/tags.model";
+import { Recipe } from "../recipes/recipe.model";
 
 interface IPolicyHandler {
   handle(ability: AppAbility): boolean;
@@ -90,5 +91,35 @@ export class DeleteTagPolicyHandler implements IPolicyHandler {
 export class ManageTagPolicyHandler implements IPolicyHandler {
   handle(ability: AppAbility) {
     return ability.can(Action.Manage, Tag);
+  }
+}
+
+export class CreateRecipePolicyHandler implements IPolicyHandler {
+  handle(ability: AppAbility) {
+    return ability.can(Action.Create, Recipe);
+  }
+}
+
+export class ReadRecipePolicyHandler implements IPolicyHandler {
+  handle(ability: AppAbility) {
+    return ability.can(Action.Read, Recipe);
+  }
+}
+
+export class UpdateRecipePolicyHandler implements IPolicyHandler {
+  handle(ability: AppAbility) {
+    return ability.can(Action.Update, Recipe);
+  }
+}
+
+export class DeleteRecipePolicyHandler implements IPolicyHandler {
+  handle(ability: AppAbility) {
+    return ability.can(Action.Delete, Recipe);
+  }
+}
+
+export class ManageRecipePolicyHandler implements IPolicyHandler {
+  handle(ability: AppAbility) {
+    return ability.can(Action.Manage, Recipe);
   }
 }

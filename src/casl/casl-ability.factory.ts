@@ -11,10 +11,11 @@ import { Role } from "../types/role.enum";
 import { Ingredient } from "../ingredients/ingredients.model";
 import { User } from "../users/user.model";
 import { Action } from "./action.enum";
-import { LoggedInUser } from "../types/logged-in.user";
-import { Tag } from "src/tags/tags.model";
+import { LoggedInUser } from "../types/logged-in-user.type";
+import { Tag } from "../tags/tags.model";
+import { Recipe } from "../recipes/recipe.model";
 
-type Subjects = InferSubjects<typeof User | typeof Ingredient | typeof Tag> | "all";
+type Subjects = InferSubjects<typeof User | typeof Ingredient | typeof Tag | typeof Recipe> | "all";
 
 export type AppAbility = Ability<[Action, Subjects]>;
 
@@ -32,6 +33,7 @@ export class CaslAbilityFactory {
         can(Action.Read, Ingredient);
         can(Action.Create, Tag);
         can(Action.Read, Tag);
+        can(Action.Manage, Recipe);
         break;
       case Role.Admin:
         can(Action.Manage, "all");

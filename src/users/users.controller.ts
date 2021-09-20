@@ -33,7 +33,7 @@ import { UsersService } from "./users.service";
 import { Paginated } from "../types/paginated.type";
 import { Role } from "../types/role.enum";
 import { UpdateUserInputDto } from "./dto/update.user.input.dto";
-import { LoggedInUser } from "../types/logged-in.user";
+import { LoggedInUser } from "../types/logged-in-user.type";
 import { JwtAuthGuard } from "../auth/jwt/jwt.guard";
 import { PoliciesGuard } from "../policies/policies.guard";
 import { CheckPolicies } from "../policies/policies.decorator";
