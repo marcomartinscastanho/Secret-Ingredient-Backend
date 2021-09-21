@@ -45,6 +45,7 @@ export class TagsService {
       .then(async (tag) => {
         await Promise.all(
           tag.recipes.map(async (recipe) => {
+            // FIXME: probably not working
             await recipe.updateOne({ $pull: { tags: tag._id } });
           })
         );

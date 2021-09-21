@@ -221,7 +221,6 @@ export class RecipesController {
     return daoToDto(await this.recipesService.findOneOrFail(id));
   }
 
-  // TODO: uncomment once update is implemented
   @Patch(":id")
   @UseGuards(PoliciesGuard)
   @CheckPolicies(new UpdateRecipePolicyHandler())

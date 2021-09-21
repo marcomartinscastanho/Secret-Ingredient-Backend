@@ -17,3 +17,15 @@ export class Tag extends Document {
 }
 
 export const TagSchema = SchemaFactory.createForClass(Tag);
+
+TagSchema.post("validate", () => {
+  console.log(`Tag ${this} has been validated`);
+});
+
+TagSchema.post("save", () => {
+  console.log(`Tag ${this} has been saved`);
+});
+
+TagSchema.post("updateOne", function () {
+  console.log(`Tag ${this} has been updated`);
+});

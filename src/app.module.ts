@@ -18,7 +18,10 @@ import { UsersModule } from "./users/users.module";
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    MongooseModule.forRoot("mongodb://localhost/secret-ingredient", { autoIndex: true }),
+    MongooseModule.forRoot(
+      "mongodb://localhost:27017,localhost:27018,localhost:27019/secret-ingredient",
+      { autoIndex: true, replicaSet: "secret-ingredient-rs" }
+    ),
     CaslModule,
   ],
 })

@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  MethodNotAllowedException,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model, Query } from "mongoose";
 import { paginateQuery } from "../utils/paginate-query";
@@ -38,8 +43,14 @@ export class IngredientsService {
       });
   }
 
-  // TODO: shouldn't be possible to delete an ingredient that has recipes associated to it
   async remove(id: string): Promise<void> {
+    const ingredient = await this.findOneOrFail(id);
+    if (ingredient.recipes.length > 0) {
+      throw new MethodNotAllowedException(
+        "Cannot delete Ingredients that are being used in Recipes"
+      );
+    }
+
     await this.ingredientModel
       .findByIdAndDelete(id)
       .orFail()
