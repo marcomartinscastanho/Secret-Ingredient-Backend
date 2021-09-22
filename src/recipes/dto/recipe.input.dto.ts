@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import {
   ArrayMinSize,
   ArrayNotEmpty,
+  ArrayUnique,
   IsArray,
   IsDefined,
   IsInt,
@@ -35,6 +36,7 @@ export class RecipeInputDto {
   })
   @IsOptional()
   @IsArray()
+  @ArrayUnique()
   tagIds: string[];
 
   @ApiProperty({

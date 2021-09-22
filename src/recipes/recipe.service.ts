@@ -63,7 +63,10 @@ export class RecipesService {
         // add the new recipe to each of its tags
         await Promise.all(
           tags.map(async (tag) => {
-            await tag.updateOne({ $push: { recipes: recipe._id } }, { session });
+            await tag.updateOne(
+              { $push: { recipes: recipe._id }, $inc: { popularity: 1 } },
+              { session, runValidators: true }
+            );
           })
         );
 
@@ -97,7 +100,12 @@ export class RecipesService {
 
     let query: Query<RecipeDocument[], RecipeDocument> = this.recipeModel
       .find()
-      .populate("tags", "_id name", Tag.name)
+      .populate({
+        path: "tags",
+        select: "_id name popularity",
+        options: { sort: { popularity: -1 } },
+        model: Tag.name,
+      })
       .populate("ingredients.ingredient", "_id name", Ingredient.name);
 
     if (userId) {
@@ -113,6 +121,13 @@ export class RecipesService {
   async findOneOrFail(id: string): Promise<Recipe> {
     return this.recipeModel
       .findById(id)
+      .populate({
+        path: "tags",
+        select: "_id name popularity",
+        options: { sort: { popularity: -1 } },
+        model: Tag.name,
+      })
+      .populate("ingredients.ingredient", "_id name", Ingredient.name)
       .orFail()
       .catch(() => {
         throw new NotFoundException(`Recipe with id ${id} not found.`);
@@ -144,8 +159,8 @@ export class RecipesService {
       const newOwner = await this.usersService.findOneOrFail(ownerId);
       const oldOwner = await this.usersService.findOneOrFail(recipe.owner._id);
 
-      await oldOwner.updateOne({ $pull: { recipes: recipe._id } });
-      await newOwner.updateOne({ $push: { recipes: recipe._id } });
+      await oldOwner.updateOne({ $pull: { recipes: recipe._id } }, { session });
+      await newOwner.updateOne({ $push: { recipes: recipe._id } }, { session });
 
       delta = { ...delta, owner: newOwner };
     }
@@ -167,7 +182,10 @@ export class RecipesService {
         oldTagIds.map(async (oldTagId) => {
           if (!tagIds.includes(oldTagId)) {
             const oldTag = await this.tagsService.findOneOrFail(oldTagId);
-            await oldTag.updateOne({ $pull: { recipes: recipe._id } });
+            await oldTag.updateOne(
+              { $pull: { recipes: recipe._id }, $inc: { popularity: -1 } },
+              { session }
+            );
           }
         })
       );
@@ -177,7 +195,10 @@ export class RecipesService {
         tagIds.map(async (newTagId) => {
           if (!oldTagIds.includes(newTagId)) {
             const newTag = await this.tagsService.findOneOrFail(newTagId);
-            await newTag.updateOne({ $push: { recipes: recipe._id } });
+            await newTag.updateOne(
+              { $push: { recipes: recipe._id }, $inc: { popularity: 1 } },
+              { session }
+            );
           }
         })
       );
@@ -205,7 +226,7 @@ export class RecipesService {
         oldIngredientIds.map(async (oldIngredientId) => {
           if (!newIngredientIds.includes(oldIngredientId)) {
             const oldIngredient = await this.ingredientsService.findOneOrFail(oldIngredientId);
-            await oldIngredient.updateOne({ $pull: { recipes: recipe._id } });
+            await oldIngredient.updateOne({ $pull: { recipes: recipe._id } }, { session });
           }
         })
       );
@@ -215,7 +236,7 @@ export class RecipesService {
         newIngredientIds.map(async (newIngredientId) => {
           if (!oldIngredientIds.includes(newIngredientId)) {
             const newIngredient = await this.ingredientsService.findOneOrFail(newIngredientId);
-            await newIngredient.updateOne({ $pull: { recipes: recipe._id } });
+            await newIngredient.updateOne({ $pull: { recipes: recipe._id } }, { session });
           }
         })
       );
@@ -224,7 +245,7 @@ export class RecipesService {
     }
 
     recipe
-      .updateOne(delta, { runValidators: true })
+      .updateOne(delta, { runValidators: true, session })
       .orFail()
       .catch((e) => {
         session.abortTransaction();
@@ -238,6 +259,10 @@ export class RecipesService {
   }
 
   async remove(id: string): Promise<void> {
+    // > Starting the remove transaction
+    const session = await this.connection.startSession();
+    session.startTransaction();
+
     await this.recipeModel
       .findByIdAndDelete(id)
       .orFail()
@@ -246,7 +271,10 @@ export class RecipesService {
         await Promise.all(
           recipe.tags.map(async (recipeTag) => {
             const tag = await this.tagsService.findOneOrFail(recipeTag._id);
-            await tag.updateOne({ $pull: { recipes: recipe._id } });
+            await tag.updateOne(
+              { $pull: { recipes: recipe._id }, $inc: { popularity: -1 } },
+              { session }
+            );
           })
         );
 
@@ -256,17 +284,22 @@ export class RecipesService {
             const ingredient = await this.ingredientsService.findOneOrFail(
               recipeIngredient.ingredient._id
             );
-            await ingredient.updateOne({ $pull: { recipes: recipe._id } });
+            await ingredient.updateOne({ $pull: { recipes: recipe._id } }, { session });
           })
         );
 
         // remove recipe from user
         const owner = await this.usersService.findOneOrFail(recipe.owner._id);
-        await owner.updateOne({ $pull: { recipes: recipe._id } });
+        await owner.updateOne({ $pull: { recipes: recipe._id } }, { session });
+
+        await session.commitTransaction();
       })
       .catch((e) => {
+        session.abortTransaction();
         throw new NotFoundException(e.message);
       });
+
+    session.endSession();
   }
 }
 

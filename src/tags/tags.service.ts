@@ -25,7 +25,7 @@ export class TagsService {
     let query: Query<TagDocument[], TagDocument> = this.tagModel.find();
     query = paginateQuery<TagDocument>(query, page, results);
 
-    return query.sort("name").exec();
+    return query.sort("-popularity").exec();
   }
 
   // TODO: this should return also the ids and names of recipes associated with this tag

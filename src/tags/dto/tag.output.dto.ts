@@ -15,6 +15,13 @@ export class TagOutputDto {
     type: String,
   })
   name: string;
+
+  @ApiProperty({
+    description: "The number of recipes using this tag",
+    example: 14,
+    type: Number,
+  })
+  popularity: number;
 }
 
 export default TagOutputDto;

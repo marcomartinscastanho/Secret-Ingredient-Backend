@@ -5,6 +5,7 @@ export const daoToDto = (tag: Tag): TagOutputDto => {
   return {
     id: tag._id,
     name: tag.name,
+    popularity: tag.popularity,
   };
 };
 

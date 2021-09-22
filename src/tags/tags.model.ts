@@ -12,20 +12,11 @@ export class Tag extends Document {
   @Prop({ type: [{ type: Types.ObjectId, ref: "Recipe" }] })
   recipes!: Recipe[];
 
+  @Prop({ type: Number, default: 0, min: 0 })
+  popularity!: number;
+
   @Prop({ default: Date.now })
   createdAt!: Date;
 }
 
 export const TagSchema = SchemaFactory.createForClass(Tag);
-
-TagSchema.post("validate", () => {
-  console.log(`Tag ${this} has been validated`);
-});
-
-TagSchema.post("save", () => {
-  console.log(`Tag ${this} has been saved`);
-});
-
-TagSchema.post("updateOne", function () {
-  console.log(`Tag ${this} has been updated`);
-});
