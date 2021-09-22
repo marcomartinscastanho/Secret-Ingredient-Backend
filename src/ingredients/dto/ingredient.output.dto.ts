@@ -15,6 +15,13 @@ export class IngredientOutputDto {
     type: String,
   })
   name: string;
+
+  @ApiProperty({
+    description: "The number of recipes using this ingredient",
+    example: 14,
+    type: Number,
+  })
+  popularity: number;
 }
 
 export default IngredientOutputDto;

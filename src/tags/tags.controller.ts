@@ -89,6 +89,8 @@ export class TagsController {
     };
   }
 
+  // TODO: method to get 1 tag, with list of recipes (_id and name)
+
   @Delete(":id")
   @UseGuards(PoliciesGuard)
   @CheckPolicies(new DeleteTagPolicyHandler())

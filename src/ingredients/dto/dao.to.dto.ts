@@ -5,6 +5,7 @@ export const daoToDto = (ingredient: Ingredient): IngredientOutputDto => {
   return {
     id: ingredient._id,
     name: ingredient.name,
+    popularity: ingredient.popularity,
   };
 };
 

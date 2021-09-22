@@ -91,6 +91,8 @@ export class IngredientsController {
     };
   }
 
+  // TODO: method to get 1 ingredient, with list of recipes (_id and name)
+
   @Delete(":id")
   @UseGuards(PoliciesGuard)
   @CheckPolicies(new DeleteIngredientPolicyHandler())

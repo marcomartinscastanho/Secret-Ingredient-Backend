@@ -74,8 +74,8 @@ export class RecipesService {
         await Promise.all(
           recipeIngredients.map(async (recipeIngredient) => {
             await recipeIngredient.ingredient.updateOne(
-              { $push: { recipes: recipe._id } },
-              { session }
+              { $push: { recipes: recipe._id }, $inc: { popularity: 1 } },
+              { session, runValidators: true }
             );
           })
         );
@@ -184,7 +184,7 @@ export class RecipesService {
             const oldTag = await this.tagsService.findOneOrFail(oldTagId);
             await oldTag.updateOne(
               { $pull: { recipes: recipe._id }, $inc: { popularity: -1 } },
-              { session }
+              { session, runValidators: true }
             );
           }
         })
@@ -197,7 +197,7 @@ export class RecipesService {
             const newTag = await this.tagsService.findOneOrFail(newTagId);
             await newTag.updateOne(
               { $push: { recipes: recipe._id }, $inc: { popularity: 1 } },
-              { session }
+              { session, runValidators: true }
             );
           }
         })
@@ -226,7 +226,10 @@ export class RecipesService {
         oldIngredientIds.map(async (oldIngredientId) => {
           if (!newIngredientIds.includes(oldIngredientId)) {
             const oldIngredient = await this.ingredientsService.findOneOrFail(oldIngredientId);
-            await oldIngredient.updateOne({ $pull: { recipes: recipe._id } }, { session });
+            await oldIngredient.updateOne(
+              { $pull: { recipes: recipe._id }, $inc: { popularity: -1 } },
+              { session, runValidators: true }
+            );
           }
         })
       );
@@ -236,7 +239,10 @@ export class RecipesService {
         newIngredientIds.map(async (newIngredientId) => {
           if (!oldIngredientIds.includes(newIngredientId)) {
             const newIngredient = await this.ingredientsService.findOneOrFail(newIngredientId);
-            await newIngredient.updateOne({ $pull: { recipes: recipe._id } }, { session });
+            await newIngredient.updateOne(
+              { $push: { recipes: recipe._id }, $inc: { popularity: 1 } },
+              { session, runValidators: true }
+            );
           }
         })
       );
@@ -273,7 +279,7 @@ export class RecipesService {
             const tag = await this.tagsService.findOneOrFail(recipeTag._id);
             await tag.updateOne(
               { $pull: { recipes: recipe._id }, $inc: { popularity: -1 } },
-              { session }
+              { session, runValidators: true }
             );
           })
         );
@@ -284,7 +290,10 @@ export class RecipesService {
             const ingredient = await this.ingredientsService.findOneOrFail(
               recipeIngredient.ingredient._id
             );
-            await ingredient.updateOne({ $pull: { recipes: recipe._id } }, { session });
+            await ingredient.updateOne(
+              { $pull: { recipes: recipe._id }, $inc: { popularity: -1 } },
+              { session, runValidators: true }
+            );
           })
         );
 
