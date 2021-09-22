@@ -29,6 +29,29 @@ export class RecipeInputDto {
   title: string;
 
   @ApiProperty({
+    description: "The number of portions the recipe serves",
+    example: 4,
+    type: Number,
+  })
+  @IsDefined()
+  @IsNotEmpty()
+  @IsInt()
+  @IsPositive()
+  portions?: number;
+
+  @ApiProperty({
+    description: "A short description of the recipe",
+    example: "Spicy recipe made of minced cow meat and beans. Goes well with white rice.",
+    type: String,
+  })
+  @IsOptional()
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(280)
+  @MinLength(3)
+  description?: string;
+
+  @ApiProperty({
     description: "The list of tag Ids to associate the Recipe to",
     example: ["60702cd016b0da1906ed1906"],
     required: false,

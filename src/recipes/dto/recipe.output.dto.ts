@@ -12,19 +12,33 @@ export class RecipeOutputDto {
   id: Types.ObjectId;
 
   @ApiProperty({
+    description: "The title of the Recipe",
+    example: "Chili con carne",
+    type: String,
+  })
+  title: string;
+
+  @ApiProperty({
+    description: "The number of portions the recipe serves",
+    example: 4,
+    type: Number,
+  })
+  portions?: number;
+
+  @ApiProperty({
+    description: "A short description of the recipe",
+    example: "Spicy recipe made of minced cow meat and beans. Goes well with white rice.",
+    type: String,
+  })
+  description?: string;
+
+  @ApiProperty({
     description: "The list of tags associated with the Recipe",
     example: [{ id: "60702cd016b0da1906ed1906", name: "Vegetarian" }],
     required: false,
     type: [TagOutputDto],
   })
   tags: TagOutputDto[];
-
-  @ApiProperty({
-    description: "The title of the Recipe",
-    example: "Chili con carne",
-    type: String,
-  })
-  title: string;
 
   @ApiProperty({
     description: "The time it takes to prepare the Recipe, in minutes",

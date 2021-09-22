@@ -7,6 +7,8 @@ export const daoToDto = (recipe: Recipe): RecipeOutputDto => {
   return {
     id: recipe._id,
     title: recipe.title,
+    portions: recipe.portions,
+    description: recipe.description,
     tags: recipe.tags.map((tag) => tagDaoToDto(tag)),
     cookingTime: recipe.cookingTime,
     preparationTime: recipe.preparationTime,

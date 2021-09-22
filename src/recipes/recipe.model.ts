@@ -11,6 +11,12 @@ export class Recipe extends Document {
   @Prop({ required: true })
   title!: string;
 
+  @Prop({ required: false })
+  portions?: number;
+
+  @Prop({ required: false })
+  description?: string;
+
   @Prop({ type: [{ type: Types.ObjectId, ref: "Tag" }] })
   tags!: Tag[];
 
