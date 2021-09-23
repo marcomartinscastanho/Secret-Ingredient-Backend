@@ -130,7 +130,9 @@ export class RecipesController {
     type: RecipeOutputDto,
     description: "Recipe is created and its properties are returned",
   })
-  @ApiUnauthorizedResponse({ description: "Only logged in users can perform this request" })
+  @ApiUnauthorizedResponse({
+    description: "Only logged in users can perform this request",
+  })
   @ApiForbiddenResponse({
     description: "Users cannot create Recipes for other users",
   })
@@ -155,6 +157,24 @@ export class RecipesController {
     summary: "Get the list of existing recipes",
   })
   @ApiQuery({
+    name: "tagId",
+    type: String,
+    description: "Get list of recipes associated with a give tag",
+    required: false,
+  })
+  @ApiQuery({
+    name: "ingredientId",
+    type: String,
+    description: "Get list of recipes that use a given ingredient",
+    required: false,
+  })
+  @ApiQuery({
+    name: "userId",
+    type: String,
+    description: "Get list of recipes belonging to a given user",
+    required: false,
+  })
+  @ApiQuery({
     name: "page",
     type: Number,
     description: "Pagination - specify a page\nIf set, results defaults to 10",
@@ -170,7 +190,9 @@ export class RecipesController {
     type: [RecipeOutputDto],
     description: "List of existing recipes",
   })
-  @ApiUnauthorizedResponse({ description: "Only logged in users can perform this request" })
+  @ApiUnauthorizedResponse({
+    description: "Only logged in users can perform this request",
+  })
   @ApiForbiddenResponse({
     description:
       "One of:\n" +
@@ -206,7 +228,9 @@ export class RecipesController {
     type: RecipeOutputDto,
     description: "The properties of the recipe",
   })
-  @ApiUnauthorizedResponse({ description: "Only logged in users can perform this request" })
+  @ApiUnauthorizedResponse({
+    description: "Only logged in users can perform this request",
+  })
   @ApiForbiddenResponse({
     description: "Normal Users cannot access recipes they don't own",
   })
@@ -236,7 +260,9 @@ export class RecipesController {
     type: RecipeOutputDto,
     description: "The new properties of the updated recipe",
   })
-  @ApiUnauthorizedResponse({ description: "Only logged in users can perform this request" })
+  @ApiUnauthorizedResponse({
+    description: "Only logged in users can perform this request",
+  })
   @ApiForbiddenResponse({
     description:
       "One of:\n" +
@@ -274,8 +300,12 @@ export class RecipesController {
     description: "Recipe is deleted",
     type: null,
   })
-  @ApiUnauthorizedResponse({ description: "Only logged in users can perform this request" })
-  @ApiForbiddenResponse({ description: "Normal Users cannot delete recipes they don't own" })
+  @ApiUnauthorizedResponse({
+    description: "Only logged in users can perform this request",
+  })
+  @ApiForbiddenResponse({
+    description: "Normal Users cannot delete recipes they don't own",
+  })
   @ApiNotFoundResponse({
     description: "Recipe not found",
   })

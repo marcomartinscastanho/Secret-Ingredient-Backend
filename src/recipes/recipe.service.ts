@@ -20,7 +20,8 @@ export class RecipesService {
   constructor(
     @InjectConnection() private readonly connection: Connection,
     @InjectModel(Recipe.name) private recipeModel: Model<RecipeDocument>,
-    @Inject(IngredientsService) private readonly ingredientsService: IngredientsService,
+    @Inject(IngredientsService)
+    private readonly ingredientsService: IngredientsService,
     @Inject(TagsService) private readonly tagsService: TagsService,
     @Inject(UsersService) private readonly usersService: UsersService
   ) {}
@@ -96,7 +97,7 @@ export class RecipesService {
   }
 
   async findRecipes(queryParams: RecipeQueryInput): Promise<Recipe[]> {
-    const { userId, page, results } = queryParams;
+    const { tagId, ingredientId, userId, page, results } = queryParams;
 
     let query: Query<RecipeDocument[], RecipeDocument> = this.recipeModel
       .find()
@@ -108,9 +109,19 @@ export class RecipesService {
       })
       .populate("ingredients.ingredient", "_id name", Ingredient.name);
 
+    if (tagId) {
+      await this.tagsService.findOneOrFail(tagId);
+      query = query.where({ tags: tagId });
+    }
+
+    if (ingredientId) {
+      await this.ingredientsService.findOneOrFail(ingredientId);
+      query = query.where({ "ingredients.ingredient": ingredientId });
+    }
+
     if (userId) {
       await this.usersService.findOneOrFail(userId);
-      query = query.where("user").equals(new ObjectId(userId));
+      query = query.where("owner").equals(new ObjectId(userId));
     }
 
     query = paginateQuery<RecipeDocument>(query, page, results);

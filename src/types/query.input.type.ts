@@ -3,4 +3,8 @@ export type QueryInput = {
   results?: number;
 };
 
-export type RecipeQueryInput = QueryInput & { userId?: string };
+export type RecipeQueryInput = QueryInput & {
+  userId?: string;
+  ingredientId?: string;
+  tagId?: string;
+};
