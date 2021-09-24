@@ -1,47 +1,9 @@
-version: "3.8"
+version: "3"
 
 services:
-  mongo1:
+  mongodb:
     image: mongo:latest
-    container_name: mongo1
     environment:
       - MONGODB_DATABASE="secret-ingredient"
-    command: ["--replSet", "secret-ingredient-rs", "--bind_ip_all", "--port", "27017"]
-    # command: ["--repair"]
-    volumes:
-      - mongodata1:/data/db
     ports:
       - 27017:27017
-    healthcheck:
-      test: test $$(echo "rs.initiate({_id:'secret-ingredient-rs',members:[{_id:0,host:\"mongo1:27017\"},{_id:1,host:\"mongo2:27018\"},{_id:2,host:\"mongo3:27019\"}]}).ok || rs.status().ok" | mongo --port 27017 --quiet) -eq 1
-      interval: 10s
-      start_period: 30s
-
-  mongo2:
-    image: mongo:latest
-    container_name: mongo2
-    environment:
-      - MONGODB_DATABASE="secret-ingredient"
-    command: ["--replSet", "secret-ingredient-rs", "--bind_ip_all", "--port", "27018"]
-    # command: ["--repair"]
-    volumes:
-      - mongodata2:/data/db
-    ports:
-      - 27018:27018
-
-  mongo3:
-    image: mongo:latest
-    container_name: mongo3
-    environment:
-      - MONGODB_DATABASE="secret-ingredient"
-    command: ["--replSet", "secret-ingredient-rs", "--bind_ip_all", "--port", "27019"]
-    # command: ["--repair"]
-    volumes:
-      - mongodata3:/data/db
-    ports:
-      - 27019:27019
-
-volumes:
-  mongodata1:
-  mongodata2:
-  mongodata3:
