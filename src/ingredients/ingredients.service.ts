@@ -30,7 +30,7 @@ export class IngredientsService {
     let query: Query<IngredientDocument[], IngredientDocument> = this.ingredientModel.find();
     query = paginateQuery<IngredientDocument>(query, page, results);
 
-    return query.sort("-popularity").exec();
+    return query.sort({ popularity: -1, name: 1 }).exec();
   }
 
   // TODO: this should return also the ids and names of recipes associated with this ingredient
