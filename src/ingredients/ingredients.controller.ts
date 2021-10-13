@@ -28,15 +28,14 @@ import { Paginated } from "../types/paginated.type";
 import { daoToDto } from "./dto/dao.to.dto";
 import { IngredientsService } from "./ingredients.service";
 
-@UseGuards(JwtAuthGuard)
 @Controller("ingredients")
 @ApiTags(Swagger.apiTags.ingredients)
 @ApiBearerAuth("accessToken")
 export class IngredientsController {
-  constructor(private readonly ingredientsService: IngredientsService) {}
+  constructor(private readonly ingredientsService: IngredientsService) { }
 
   @Post()
-  @UseGuards(PoliciesGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(new CreateIngredientPolicyHandler())
   @ApiOperation({
     summary: "Creates a new ingredient",
@@ -58,8 +57,6 @@ export class IngredientsController {
   }
 
   @Get()
-  @UseGuards(PoliciesGuard)
-  @CheckPolicies(new ReadIngredientPolicyHandler())
   @ApiOperation({
     summary: "Get the list of existing ingredients",
   })
@@ -91,10 +88,8 @@ export class IngredientsController {
     };
   }
 
-  // TODO: method to get 1 ingredient, with list of recipes (_id and name)
-
   @Delete(":id")
-  @UseGuards(PoliciesGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(new DeleteIngredientPolicyHandler())
   @ApiOperation({
     summary: "Deletes a given ingredient",

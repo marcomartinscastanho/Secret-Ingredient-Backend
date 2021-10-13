@@ -28,15 +28,14 @@ import { TagsService } from "./tags.service";
 import { TagInputDto } from "./dto/tag.input.dto";
 import { TagOutputDto } from "./dto/tag.output.dto";
 
-@UseGuards(JwtAuthGuard)
 @Controller("tags")
 @ApiTags(Swagger.apiTags.tags)
 @ApiBearerAuth("accessToken")
 export class TagsController {
-  constructor(private readonly tagsService: TagsService) {}
+  constructor(private readonly tagsService: TagsService) { }
 
   @Post()
-  @UseGuards(PoliciesGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(new CreateTagPolicyHandler())
   @ApiOperation({
     summary: "Creates a new tag",
@@ -56,8 +55,6 @@ export class TagsController {
   }
 
   @Get()
-  @UseGuards(PoliciesGuard)
-  @CheckPolicies(new ReadTagPolicyHandler())
   @ApiOperation({
     summary: "Get the list of existing tags",
   })
@@ -89,10 +86,8 @@ export class TagsController {
     };
   }
 
-  // TODO: method to get 1 tag, with list of recipes (_id and name)
-
   @Delete(":id")
-  @UseGuards(PoliciesGuard)
+  @UseGuards(JwtAuthGuard, PoliciesGuard)
   @CheckPolicies(new DeleteTagPolicyHandler())
   @ApiOperation({
     summary: "Deletes a given tag",
