@@ -6,7 +6,7 @@ export const daoToDto = (recipeIngredient: RecipeIngredient): RecipeIngredientOu
   return {
     quantity: recipeIngredient.quantity,
     ingredient: ingredientDaoToDto(recipeIngredient.ingredient),
-    specification: recipeIngredient.specification ? recipeIngredient.specification : "",
+    specification: recipeIngredient.specification,
   };
 };
 

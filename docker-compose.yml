@@ -7,3 +7,8 @@ services:
       - MONGODB_DATABASE="secret-ingredient"
     ports:
       - 27017:27017
+    volumes:
+      - secret-ingredient:/data/db
+
+volumes:
+  secret-ingredient:

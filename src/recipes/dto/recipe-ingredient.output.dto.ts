@@ -21,7 +21,7 @@ export class RecipeIngredientOutputDto {
     example: "chopped in cubes",
     type: String,
   })
-  specification: string;
+  specification?: string;
 }
 
 export default RecipeIngredientOutputDto;

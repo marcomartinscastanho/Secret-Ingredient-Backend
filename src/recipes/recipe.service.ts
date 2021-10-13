@@ -23,7 +23,7 @@ export class RecipesService {
     private readonly ingredientsService: IngredientsService,
     @Inject(TagsService) private readonly tagsService: TagsService,
     @Inject(UsersService) private readonly usersService: UsersService
-  ) {}
+  ) { }
   async create(ownerId: string, dto: RecipeInputDto): Promise<Recipe> {
     const { ingredients, tagIds, ...input } = dto;
 
@@ -143,13 +143,16 @@ export class RecipesService {
     const recipe = await this.findOneOrFail(id);
 
     const hasOwnerChanged = ownerId && strfy(ownerId) !== strfy(recipe.owner._id);
-    const haveTagsChanged = strfy(tagIds) !== strfy(recipe.tags);
+    const haveTagsChanged =
+      strfy(tagIds.sort()) !== strfy(recipe.tags.map((tag) => tag._id).sort());
     const haveIngredientsChanged =
       strfy(ingredients) !==
       strfy(
-        recipe.ingredients.map((ing) => {
-          ing.quantity, ing.ingredient, ing.specification;
-        })
+        recipe.ingredients.map((ing) => ({
+          quantity: ing.quantity,
+          ingredient: ing.ingredient._id,
+          specification: ing.specification,
+        }))
       );
 
     // update owner

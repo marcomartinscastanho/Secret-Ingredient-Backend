@@ -33,8 +33,7 @@ export class RecipeInputDto {
     example: 4,
     type: Number,
   })
-  @IsDefined()
-  @IsNotEmpty()
+  @IsOptional()
   @IsInt()
   @IsPositive()
   portions?: number;
@@ -67,8 +66,7 @@ export class RecipeInputDto {
     example: 20,
     type: Number,
   })
-  @IsDefined()
-  @IsNotEmpty()
+  @IsOptional()
   @IsInt()
   @IsPositive()
   preparationTime?: number;
@@ -78,8 +76,7 @@ export class RecipeInputDto {
     example: 45,
     type: Number,
   })
-  @IsDefined()
-  @IsNotEmpty()
+  @IsOptional()
   @IsInt()
   @IsPositive()
   cookingTime?: number;
