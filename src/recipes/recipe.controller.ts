@@ -48,7 +48,7 @@ import {
 @ApiTags(Swagger.apiTags.recipes)
 @ApiBearerAuth("accessToken")
 export class RecipesController {
-  constructor(private readonly recipesService: RecipesService) {}
+  constructor(private readonly recipesService: RecipesService) { }
 
   private owner = (requester: LoggedInUser, createforUserId: string): string => {
     if (!createforUserId) {

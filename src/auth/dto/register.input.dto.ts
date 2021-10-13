@@ -16,8 +16,8 @@ export class RegisterInputDto {
     type: String,
   })
   @IsDefined()
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   name: string;
 
   @ApiProperty({
@@ -26,8 +26,8 @@ export class RegisterInputDto {
     type: String,
   })
   @IsDefined()
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   @Matches(/^[a-zA-Z0-9]+([_.-]?[a-zA-Z0-9])*$/)
   username: string;
 
@@ -42,14 +42,14 @@ export class RegisterInputDto {
     type: String,
   })
   @IsDefined()
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   @MinLength(minLength)
   @MaxLength(maxLength)
   @Matches(new RegExp(`^[A-Za-z\\d${acceptedSymbols}]*$`))
   @Matches(new RegExp(`^(?=(?:.*[A-Z]){${minUppercase},}).+$`))
   @Matches(new RegExp(`^(?=(?:.*[a-z]){${minLowercase},}).+$`))
-  @Matches(new RegExp(`^(?=(?:.*[${acceptedSymbols}]){${minSymbols},}).+$`))
+  // @Matches(new RegExp(`^(?=(?:.*[${acceptedSymbols}]){${minSymbols},}).+$`))
   password: string;
 }
 

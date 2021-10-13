@@ -107,7 +107,7 @@ export class RecipeInputDto {
   @IsArray()
   @ArrayNotEmpty()
   @ArrayMinSize(2)
-  @MinLength(8, {
+  @MinLength(3, {
     each: true,
   })
   @MaxLength(240, {
