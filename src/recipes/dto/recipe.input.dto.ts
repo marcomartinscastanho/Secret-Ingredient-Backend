@@ -11,6 +11,7 @@ import {
   IsPositive,
   IsString,
   MaxLength,
+  Min,
   MinLength,
 } from "class-validator";
 import RecipeIngredientInputDto from "./recipe-ingredient.input.dto";
@@ -68,7 +69,7 @@ export class RecipeInputDto {
   })
   @IsOptional()
   @IsInt()
-  @IsPositive()
+  @Min(0)
   preparationTime?: number;
 
   @ApiProperty({
@@ -78,7 +79,7 @@ export class RecipeInputDto {
   })
   @IsOptional()
   @IsInt()
-  @IsPositive()
+  @Min(0)
   cookingTime?: number;
 
   @ApiProperty({
