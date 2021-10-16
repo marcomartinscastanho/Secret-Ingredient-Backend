@@ -15,6 +15,8 @@ import { Ingredient } from "../ingredients/ingredients.model";
 
 const strfy = (x: any) => JSON.stringify(x);
 
+const unique = <T>(array: T[]) => [...new Set(array)];
+
 @Injectable()
 export class RecipesService {
   constructor(
@@ -23,7 +25,7 @@ export class RecipesService {
     private readonly ingredientsService: IngredientsService,
     @Inject(TagsService) private readonly tagsService: TagsService,
     @Inject(UsersService) private readonly usersService: UsersService
-  ) { }
+  ) {}
   async create(ownerId: string, dto: RecipeInputDto): Promise<Recipe> {
     const { ingredients, tagIds, ...input } = dto;
 
@@ -69,8 +71,13 @@ export class RecipesService {
 
         // add the new recipe to each of its ingredients
         await Promise.all(
-          recipeIngredients.map(async (recipeIngredient) => {
-            await recipeIngredient.ingredient.updateOne(
+          unique(
+            recipeIngredients.map(
+              (recipeIngredient) => recipeIngredient.ingredient._id.toString() as string
+            )
+          ).map(async (ingredientId) => {
+            const ingredient = await this.ingredientsService.findOneOrFail(ingredientId);
+            await ingredient.updateOne(
               { $push: { recipes: recipe._id }, $inc: { popularity: 1 } },
               { runValidators: true }
             );
@@ -224,7 +231,7 @@ export class RecipesService {
 
       // remove recipe from dropped ingredients
       await Promise.all(
-        oldIngredientIds.map(async (oldIngredientId) => {
+        unique(oldIngredientIds).map(async (oldIngredientId) => {
           if (!newIngredientIds.includes(oldIngredientId)) {
             const oldIngredient = await this.ingredientsService.findOneOrFail(oldIngredientId);
             await oldIngredient.updateOne(
@@ -237,7 +244,7 @@ export class RecipesService {
 
       // add recipe to newly added ingredients
       await Promise.all(
-        newIngredientIds.map(async (newIngredientId) => {
+        unique(newIngredientIds).map(async (newIngredientId) => {
           if (!oldIngredientIds.includes(newIngredientId)) {
             const newIngredient = await this.ingredientsService.findOneOrFail(newIngredientId);
             await newIngredient.updateOne(
@@ -279,10 +286,12 @@ export class RecipesService {
 
         // remove recipe from all its ingredients
         await Promise.all(
-          recipe.ingredients.map(async (recipeIngredient) => {
-            const ingredient = await this.ingredientsService.findOneOrFail(
-              recipeIngredient.ingredient._id
-            );
+          unique(
+            recipe.ingredients.map(
+              (recipeIngredient) => recipeIngredient.ingredient._id.toString() as string
+            )
+          ).map(async (ingredientId) => {
+            const ingredient = await this.ingredientsService.findOneOrFail(ingredientId);
             await ingredient.updateOne(
               { $pull: { recipes: recipe._id }, $inc: { popularity: -1 } },
               { runValidators: true }
