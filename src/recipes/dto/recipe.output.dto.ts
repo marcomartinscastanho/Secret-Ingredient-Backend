@@ -2,6 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Types } from "mongoose";
 import { TagOutputDto } from "../../tags/dto/tag.output.dto";
 import { RecipeIngredientOutputDto } from "./recipe-ingredient.output.dto";
+import { RecipeOwnerOutputDto } from "./recipe-owner.output.dto";
 
 export class RecipeOutputDto {
   @ApiProperty({
@@ -79,7 +80,7 @@ export class RecipeOutputDto {
     example: "60702cd016b0da1906ed1906",
     type: String,
   })
-  user: Types.ObjectId;
+  owner: RecipeOwnerOutputDto;
 }
 
 export default RecipeOutputDto;

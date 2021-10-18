@@ -12,6 +12,7 @@ import { IngredientsService } from "../ingredients/ingredients.service";
 import { Tag } from "../tags/tags.model";
 import { RecipeIngredient } from "../types/recipe-ingredient.type";
 import { Ingredient } from "../ingredients/ingredients.model";
+import { User } from "../users/user.model";
 
 const strfy = (x: any) => JSON.stringify(x);
 
@@ -137,6 +138,11 @@ export class RecipesService {
         model: Tag.name,
       })
       .populate("ingredients.ingredient", "_id name", Ingredient.name)
+      .populate({
+        path: "owner",
+        select: "_id name",
+        model: User.name,
+      })
       .orFail()
       .catch(() => {
         throw new NotFoundException(`Recipe with id ${id} not found.`);

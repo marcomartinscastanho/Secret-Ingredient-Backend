@@ -1,6 +1,7 @@
 import { Recipe } from "../recipe.model";
 import { RecipeOutputDto } from "./recipe.output.dto";
 import { daoToDto as recipeIngredientDaoToDto } from "./recipe-ingredient.dao.to.dto";
+import { daoToDto as recipeOwnerDaoToDto } from "./recipe-owner.dao.to.dto";
 import { daoToDto as tagDaoToDto } from "../../tags/dto/dao.to.dto";
 
 export const daoToDto = (recipe: Recipe): RecipeOutputDto => {
@@ -14,7 +15,7 @@ export const daoToDto = (recipe: Recipe): RecipeOutputDto => {
     preparationTime: recipe.preparationTime,
     ingredients: recipe.ingredients.map((ingredient) => recipeIngredientDaoToDto(ingredient)),
     preparationSteps: recipe.preparationSteps,
-    user: recipe.owner._id,
+    owner: recipeOwnerDaoToDto(recipe.owner),
   };
 };
 
